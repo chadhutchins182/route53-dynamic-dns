@@ -1,5 +1,5 @@
 # Use offical Node.js image.  The image uses Apline Linux
-FROM arm64v8/node:10-buster
+FROM arm32v7/node:12.18.4-alpine
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -16,7 +16,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.schema-version="1.1"
 
 # Create app directory
-RUN mkdir -p /usr/src/app
+#RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install app dependencies
