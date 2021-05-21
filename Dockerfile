@@ -7,16 +7,16 @@ ARG DOCKER_TAG
 ARG GIT_SHA
 
 LABEL org.opencontainers.image.created=$BUILD_DATE \
-  org.opencontainers.image.authors="Steven Mayotte" \
-  org.opencontainers.image.url="https://github.com/sjmayotte/route53-dynamic-dns" \
-  org.opencontainers.image.documentation="https://github.com/sjmayotte/route53-dynamic-dns" \
-  org.opencontainers.image.source="https://github.com/sjmayotte/route53-dynamic-dns" \
+  org.opencontainers.image.authors="Chad Hutchins" \
+  org.opencontainers.image.url="https://github.com/chadhutchins182/route53-dynamic-dns" \
+  org.opencontainers.image.documentation="https://github.com/chadhutchins182/route53-dynamic-dns" \
+  org.opencontainers.image.source="https://github.com/chadhutchins182/route53-dynamic-dns" \
   org.opencontainers.image.version=$DOCKER_TAG \
   org.opencontainers.image.revision=$GIT_SHA \
-  org.opencontainers.image.vendor="sjmayotte" \
+  org.opencontainers.image.vendor="chadhutchins182" \
   org.opencontainers.image.licenses="MIT" \
   org.opencontainers.image.ref.name="" \
-  org.opencontainers.image.title="route53-dynamic-dns" \
+  org.opencontainers.image.title="route53-dynamic-dns-arm32v7" \
   org.opencontainers.image.description="Update AWS Route53 hosted zone with current public IP address. Alternative to Dynamic DNS services such as Dyn, No-IP, etc"
 
 # Create app directory
