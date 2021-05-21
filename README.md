@@ -18,7 +18,7 @@ __FOR RASPBERRY PI 4__
 </div>
 
 
-Update [Amazon Route53](http://aws.amazon.com/route53/) hosted zone with current public IP address (from [OpenDNS](https://diagnostic.opendns.com/myip) or [ifconfig](https://ifconfig.co/ip)).  No cost alternative to DynamicDNS services such as Dyn, No-IP, etc.  Designed to be simple and efficient with the ability to run as a [Node.js process](#nodejs-process) or in a [Docker Container](https://hub.docker.com/r/sjmayotte/route53-dynamic-dns/).
+Update [Amazon Route53](http://aws.amazon.com/route53/) hosted zone with current public IP address (from [OpenDNS](https://diagnostic.opendns.com/myip) or [ifconfig](https://ifconfig.co/ip)).  No cost alternative to DynamicDNS services such as Dyn, No-IP, etc.  Designed to be simple and efficient with the ability to run as a [Node.js process](#nodejs-process) or in a [Docker Container](https://hub.docker.com/r/chadhutchins182/route53-dynamic-dns-arm32v7/).
 
 # Table of Contents
 - [Environment Variables](#environment-variables)
@@ -28,9 +28,7 @@ Update [Amazon Route53](http://aws.amazon.com/route53/) hosted zone with current
 - [Usage](#usage)
   - [Docker](#docker)
     - [Versions](#versions)
-      - [`route53-dynamic-dns:latest`](#route53-dynamic-dnslatest)
-      - [`route53-dynamic-dns:v1.2.0`](#route53-dynamic-dnsv120)
-      - [`route53-dynamic-dns:dev`](#route53-dynamic-dnsdev)
+      - [`route53-dynamic-dns-arm32v7:latest`](#route53-dynamic-dns-arm32v7)
     - [Pull Image](#pull-image)
     - [Run Container Examples](#run-container-examples)
       - [Minimium ENV Variables](#minimium-env-variables)
@@ -111,19 +109,13 @@ Below are examples of minimium IAM policies for Route53 and SES
 Image is built from official [`node:alpine`](https://hub.docker.com/_/node/) image, which runs on the popular [Alpine Linux project](http://alpinelinux.org). Alpine Linux is much smaller than most distribution base images (~5MB), which leads to much slimmer images in general.  If you are not familiar with Docker, please start by reading [Getting Started](https://docs.docker.com/get-started/) section of [Official Docker Documentation](https://docs.docker.com/).
 
 ### Versions
-#### `route53-dynamic-dns:latest`
-Points to `latest` stable version.  Every attempt is made to keep releases backwards compatible.  Project follows [Semantic Versioning](https://semver.org/).  You can expect breaking changes may exist in MAJOR versions (1.X.X -> 2.X.X), but they should not exist in MINOR and PATCH versions.  Since project inception there has not been a release that is not backwards compatible.  The code base is stable.  There is no expectation of issues with backwards compatibility in future versions, but everyone should be aware of how versions are managed.  For most people looking to be hands off on upgrades, it should be safe to use `latest` version.  If your primary concern is stability, it is recommended that you use a specific version (see below).
-
-#### `route53-dynamic-dns:v1.2.0`
-Stable version built from tag `v1.2.0`.  The code is also available as [GitHub Release](https://github.com/sjmayotte/route53-dynamic-dns/releases) with tag `v1.2.0`.
-
-#### `route53-dynamic-dns:dev`
-Automated build triggers with every `git push` to `master` branch.  This version is not guarenteed to be stable.  If you are looking for a stable version, please use `route53-dynamic-dns:v1.2.0` or `route53-dynamic-dns:latest`.
+#### `chadhutchins182/route53-dynamic-dns-arm32v7:latest`
+Points to `latest` stable version.  
 
 ### Pull Image
 Pull image from DockerHub.  Replace `[version]` with desired version (ex: `v1.2.0`).
 ```bash
-$ docker pull sjmayotte/route53-dynamic-dns:[verison]
+$ docker pull chadhutchins182/route53-dynamic-dns-arm32v7:[verison]
 ```
 
 ### Run Container Examples
@@ -140,7 +132,7 @@ $ docker run -d -t -i --rm \
     -e ROUTE53_DOMAIN=[value] \
     -e ROUTE53_TYPE=[value] \
     -e ROUTE53_TTL=[value] \
-    sjmayotte/route53-dynamic-dns:[verison]
+    chadhutchins182/route53-dynamic-dns-arm32v7:[verison]
 ```
 
 #### Enable SES Emails
@@ -158,7 +150,7 @@ $ docker run -d -t -i --rm \
     -e SEND_EMAIL_SES=true \
     -e SES_TO_ADDRESS=[value] \
     -e SES_FROM_ADDRESS=[value] \
-    sjmayotte/route53-dynamic-dns:[verison]
+    chadhutchins182/route53-dynamic-dns-arm32v7:[verison]
 ```
 
 #### Full Configuration
@@ -179,7 +171,7 @@ $ docker run -d -t -i --rm \
     -e UPDATE_FREQUENCY=60000 \
     -e IPCHECKER=ifconfig.co \
     -e LOG_TO_STDOUT=true \
-    sjmayotte/route53-dynamic-dns:[verison]
+    chadhutchins182/route53-dynamic-dns-arm32v7:[verison]
 ```
 
 ### View Useful Container Data
@@ -190,7 +182,7 @@ $ docker ps -a
 Sample output
 ```
 CONTAINER ID    IMAGE                           COMMAND        CREATED            STATUS            PORTS       NAMES
-9998c92ff8a1    sjmayotte/route53-dynamic-dns   "npm start"    45 seconds ago     Up 44 seconds                 route53-dynamic-dns
+9998c92ff8a1    chadhutchins182/route53-dynamic-dns-arm32v7   "npm start"    45 seconds ago     Up 44 seconds                 route53-dynamic-dns
 ```
 View logs of `STDOUT` from `CONTAINER ID` (copy from output above)
 ```bash
@@ -218,7 +210,7 @@ Create file in `/etc/systemd/system/[service-name]` for `systemd` configuration.
 ```bash
 $ vi /etc/systemd/system/r53-dydns-container.service
 ```
-Add contents below to file.  Replace `[env]` with [Environment Variables](#environment-variables).  Example below uses `sjmayotte/route53-dynamic-dns:v1.1`
+Add contents below to file.  Replace `[env]` with [Environment Variables](#environment-variables).  Example below uses `chadhutchins182/route53-dynamic-dns-arm32v7:v1.1`
 ```bash
 [Unit]
 Description=Route53 Dynamic DNS Container
@@ -229,7 +221,7 @@ Type=simple
 TimeoutStartSec=5m
 ExecStartPre=-/usr/bin/podman rm "r53-dydns"
 
-ExecStart=/usr/bin/podman run -it --name r53-dydns -e AWS_ACCESS_KEY_ID=[value] -e AWS_SECRET_ACCESS_KEY=[value] -e AWS_REGION=[value] -e ROUTE53_HOSTED_ZONE_ID=[value] -e ROUTE53_DOMAIN=[value] -e ROUTE53_TYPE=[value] -e ROUTE53_TTL=[value] -e SEND_EMAIL_SES=[value] -e SES_TO_ADDRESS=[value] -e SES_FROM_ADDRESS=[value] -e UPDATE_FREQUENCY=[value] -e IPCHECKER=[value] -e LOG_TO_STDOUT=[value] sjmayotte/route53-dynamic-dns:[tag]
+ExecStart=/usr/bin/podman run -it --name r53-dydns -e AWS_ACCESS_KEY_ID=[value] -e AWS_SECRET_ACCESS_KEY=[value] -e AWS_REGION=[value] -e ROUTE53_HOSTED_ZONE_ID=[value] -e ROUTE53_DOMAIN=[value] -e ROUTE53_TYPE=[value] -e ROUTE53_TTL=[value] -e SEND_EMAIL_SES=[value] -e SES_TO_ADDRESS=[value] -e SES_FROM_ADDRESS=[value] -e UPDATE_FREQUENCY=[value] -e IPCHECKER=[value] -e LOG_TO_STDOUT=[value] chadhutchins182/route53-dynamic-dns-arm32v7:[tag]
 
 ExecReload=-/usr/bin/podman stop "r53-dydns"
 ExecReload=-/usr/bin/podman rm "r53-dydns"
@@ -278,9 +270,9 @@ $ systemctl reload r53-dydns-container.service
 Steps below assume you have Node.js and NPM installed on machine.  If you do not, please [download and install Node.js and NPM](https://nodejs.org/en/download/) before proceeding.  Process confirmed to work on Node v14.
 
 ### Download Release
-Download release `version` from [release repository](https://github.com/sjmayotte/route53-dynamic-dns/releases).  For example, you can use `v1.2.0.tar.gz` to download source for release tag `v1.2.0`.
+Download release `version` from [release repository](https://github.com/chadhutchins182/route53-dynamic-dns/releases).  For example, you can use `v1.2.0.tar.gz` to download source for release tag `v1.2.0`.
 ```bash
-$ curl -sL https://github.com/sjmayotte/route53-dynamic-dns/archive/[version] | tar xz
+$ curl -sL https://github.com/chadhutchins182/route53-dynamic-dns/archive/[version] | tar xz
 $ cd route53-dynamic-dns
 ```
 
@@ -326,7 +318,7 @@ If you set ENV variable `LOG_TO_STDOUT=true` then logs will send to STDOUT.
 Application logs are written to `application.log` in root project directory.  Log files are compressed and archived after reaching 10MB in size.  The most recent 3 archives are kept in rotation.  All other archives are deleted to keep footprint small.  This is ignored if `LOG_TO_STDOUT=true`.
 
 # Issues
-If you run into any issues, check to make sure all variables are set properly in `.env` or passed properly into Docker Container at runtime.  If you are sure your environment variables are correct, please open an [issue](https://github.com/sjmayotte/route53-dynamic-dns/issues) and provide as much detail as possible.
+If you run into any issues, check to make sure all variables are set properly in `.env` or passed properly into Docker Container at runtime.  If you are sure your environment variables are correct, please open an [issue](https://github.com/chadhutchins182/route53-dynamic-dns/issues) and provide as much detail as possible.
 
 # License
 ## MIT
@@ -336,4 +328,4 @@ Route53 Dynamic DNS is licensed under the MIT License (https://opensource.org/li
 The following 3rd-party software components may be used by or distributed with route53-dynamic-dns: https://app.fossa.io/reports/f5377d5f-557e-4e21-8bfa-93a27ea6e540
 
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fsjmayotte%2Froute53-dynamic-dns.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fsjmayotte%2Froute53-dynamic-dns?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fchadhutchins182%2Froute53-dynamic-dns.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fchadhutchins182%2Froute53-dynamic-dns?ref=badge_large)
