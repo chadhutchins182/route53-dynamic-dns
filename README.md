@@ -8,7 +8,7 @@ __FOR RASPBERRY PI 4__
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/chadhutchins182/route53-dynamic-dns/)
-[![ci](https://github.com/chadhutchins182/route53-dynamic-dns/workflows/ci/badge.svg?branch=main)](https://github.com/chadhutchins182/route53-dynamic-dns/actions/workflows/build.yml)
+[![build](https://github.com/chadhutchins182/route53-dynamic-dns/actions/workflows/build.yml/badge.svg)](https://github.com/chadhutchins182/route53-dynamic-dns/actions/workflows/build.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/chadhutchins182/route53-dynamic-dns-arm32v7)](https://hub.docker.com/r/chadhutchins182/route53-dynamic-dns-arm32v7)
 [![Docker Image Size (latest)](https://img.shields.io/docker/image-size/chadhutchins182/route53-dynamic-dns-arm32v7/latest)](https://hub.docker.com/r/chadhutchins182/route53-dynamic-dns-arm32v7)
 [![GitHub Issues](https://img.shields.io/github/issues/chadhutchins182/route53-dynamic-dns.svg)](https://github.com/chadhutchins182/route53-dynamic-dns-arm32v7/issues)
